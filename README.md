@@ -76,92 +76,46 @@ flowchart TD
 
 ## Components
 
-### Policy Validator
-
-Validates the IAM policy structure.
-
-**Input:**
-- IAM policy JSON
-
-**Output:**
-- Validation result (valid / invalid)
-- Validation errors
+| Component | Type | Input | Output | Purpose |
+|---|---|---|---|---|
+| Policy Validator | Tool | IAM policy JSON | valid/errors | Ensures policy structure is correct |
+| Rule-Based Analyzer | Tool | Valid policy | findings + scores | Detects deterministic IAM risks |
+| LLM Security Review | Agent | policy + findings | reasoning | Adds contextual security reasoning |
+| Intent Inference | Sub-agent | weak policy | inferred intent | Helps remediation preserve intent |
+| Remediator | Tool | policy + findings + intent | fixed policy | Generates safer policy |
+| Evaluation Runner | Tool | dataset | metrics | Measures performance |
 
 ---
 
-### Rule-Based Analyzer
+## Design Justification
 
-Detects known IAM security risks using deterministic rules.
+The system uses a hybrid architecture because IAM policy analysis requires both deterministic checks and contextual reasoning.
 
-**Input:**
-- Validated IAM policy
+Rule-based analysis was implemented as a separate tool because known IAM risks (such as wildcard permissions, privilege escalation, and destructive actions) are deterministic and should always be detected reliably.
 
-**Output:**
-- Findings
-- Severity
-- Risk score contribution
-- Evidence
+The LLM is used as a reasoning agent rather than the main classifier because LLM-only systems can produce inconsistent or hallucinated outputs. The LLM is therefore limited to explanation and intent inference.
 
----
+The system is designed to be fault-tolerant and continues to operate correctly even when the LLM is unavailable.
 
-### LLM Security Review Agent
+The validator is separated from the analyzer to isolate syntax validation from security analysis.
 
-Simulates a senior cloud security engineer reviewing the policy.
-
-**Input:**
-- IAM policy
-- Rule-based findings
-- Initial classification
-
-**Output:**
-- LLM classification
-- Security reasoning
-- Confidence
-
-If the LLM is unavailable, rate-limited, or not configured, the system falls back to deterministic rule-based classification.
+The remediation component is separated because fixing a policy requires different logic from detecting issues.
 
 ---
 
-### LLM Intent Inference
+## Alternatives Considered
 
-Attempts to infer the original intent of overly permissive policies.
+### LLM-only classifier
 
-**Input:**
-- Weak IAM policy
-- Findings
+Rejected because it may produce inconsistent classifications and may miss deterministic IAM risks.
 
-**Output:**
-- Inferred intent
-- Target service
-- Suggested least-privilege actions
-- Scoped resource hint
-- Confidence level
+### Rule-only classifier
 
----
+Rejected because it cannot reason about intent and provides limited explanations.
 
-### Remediation Generator
+### AWS Access Analyzer
 
-Generates a safer IAM policy while preserving intent when possible.
-
-**Input:**
-- Weak IAM policy
-- Findings
-- Inferred intent
-
-**Output:**
-- Remediated policy
-- Explanation of changes
-
----
-
-### Evaluation Runner
-
-Runs the system on a labeled dataset and measures performance.
-
-**Output:**
-- Agreement rate
-- Execution time
-- Per-policy results
+Not used as the primary solution because the task requires building an agentic system, but it is a strong candidate for future integration.
 
 ---
 
@@ -199,9 +153,23 @@ If the key is missing or the API fails (e.g., quota exceeded), the system contin
 
 ---
 
-## Evaluation Results
+## Evaluation Report
 
-Evaluation was performed on a labeled dataset of 12 IAM policies.
+The system was evaluated on a labeled dataset of IAM policies.
+
+### Metrics
+
+- Classification agreement rate
+- Execution time
+- Remediation validity
+
+### Definition of Done
+
+- Agreement rate ≥ 80%
+- All remediated policies must be valid
+- Every policy must return explained findings
+
+### Results
 
 ```
 Total policies: 12
@@ -267,7 +235,7 @@ For example:
 }
 ```
 
-This policy does not provide enough context to determine whether the intended use case involves S3, EC2, DynamoDB, or administrative access.
+This policy does not provide enough context to determine the intended use case.
 
 This limitation is inherent to IAM policies that lack contextual constraints.
 
@@ -277,7 +245,7 @@ In such cases, the system applies a conservative fallback remediation strategy.
 
 ## Future Improvements
 
-- More advanced LLM-based intent inference
+- Stronger LLM-based intent inference
 - Interactive clarification for ambiguous policies
 - Deeper IAM grammar validation
 - Integration with AWS Access Analyzer
