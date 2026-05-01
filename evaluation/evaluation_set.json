@@ -1,0 +1,197 @@
+﻿[
+  {
+    "name": "weak_full_admin",
+    "expected_classification": "Weak",
+    "policy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "*",
+          "Resource": "*"
+        }
+      ]
+    }
+  },
+  {
+    "name": "strong_s3_readonly_with_mfa",
+    "expected_classification": "Strong",
+    "policy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["s3:GetObject", "s3:ListBucket"],
+          "Resource": [
+            "arn:aws:s3:::company-reports",
+            "arn:aws:s3:::company-reports/*"
+          ],
+          "Condition": {
+            "Bool": {
+              "aws:MultiFactorAuthPresent": "true"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "weak_iam_passrole",
+    "expected_classification": "Weak",
+    "policy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "iam:PassRole",
+          "Resource": "*"
+        }
+      ]
+    }
+  },
+  {
+    "name": "weak_service_wildcard",
+    "expected_classification": "Weak",
+    "policy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "ec2:*",
+          "Resource": "*"
+        }
+      ]
+    }
+  },
+  {
+    "name": "strong_dynamodb_readonly_scoped",
+    "expected_classification": "Strong",
+    "policy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": ["dynamodb:GetItem", "dynamodb:Query"],
+          "Resource": "arn:aws:dynamodb:us-east-1:123456789012:table/Orders",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "us-east-1"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "weak_s3_delete_all_buckets",
+    "expected_classification": "Weak",
+    "policy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "s3:DeleteObject",
+          "Resource": "arn:aws:s3:::*"
+        }
+      ]
+    }
+  },
+  {
+    "name": "weak_kms_decrypt_all_keys",
+    "expected_classification": "Weak",
+    "policy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "kms:Decrypt",
+          "Resource": "*"
+        }
+      ]
+    }
+  },
+  {
+    "name": "weak_assume_any_role",
+    "expected_classification": "Weak",
+    "policy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "sts:AssumeRole",
+          "Resource": "*"
+        }
+      ]
+    }
+  },
+  {
+    "name": "strong_cloudwatch_logs_readonly",
+    "expected_classification": "Strong",
+    "policy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "logs:DescribeLogGroups",
+            "logs:DescribeLogStreams",
+            "logs:GetLogEvents"
+          ],
+          "Resource": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/lambda/orders-service:*",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "us-east-1"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "strong_lambda_invoke_specific_function",
+    "expected_classification": "Strong",
+    "policy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "lambda:InvokeFunction",
+          "Resource": "arn:aws:lambda:us-east-1:123456789012:function:orders-processor",
+          "Condition": {
+            "StringEquals": {
+              "aws:RequestedRegion": "us-east-1"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "weak_ec2_terminate_instances",
+    "expected_classification": "Weak",
+    "policy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "ec2:TerminateInstances",
+          "Resource": "*"
+        }
+      ]
+    }
+  },
+  {
+    "name": "weak_notaction_allow",
+    "expected_classification": "Weak",
+    "policy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "NotAction": "iam:DeleteUser",
+          "Resource": "*"
+        }
+      ]
+    }
+  }
+]
