@@ -1,9 +1,28 @@
 ﻿from copy import deepcopy
 
+from src.llm_agent import infer_policy_intent
+
+
+FALLBACK_ACTIONS = ["s3:GetObject", "s3:ListBucket"]
+FALLBACK_RESOURCES = [
+    "arn:aws:s3:::example-bucket",
+    "arn:aws:s3:::example-bucket/*"
+]
+
 
 def remediate_policy(policy: dict, findings: list[dict]) -> dict:
     remediated = deepcopy(policy)
     changes = []
+
+    intent = infer_policy_intent(policy, findings)
+
+    suggested_actions = intent.get("actions") or FALLBACK_ACTIONS
+    suggested_resource = intent.get("resource_hint")
+
+    if suggested_resource:
+        suggested_resources = [suggested_resource]
+    else:
+        suggested_resources = FALLBACK_RESOURCES
 
     statements = remediated.get("Statement", [])
     if isinstance(statements, dict):
@@ -15,25 +34,30 @@ def remediate_policy(policy: dict, findings: list[dict]) -> dict:
             continue
 
         if statement.get("Action") == "*":
-            statement["Action"] = [
-                "s3:GetObject",
-                "s3:ListBucket"
-            ]
+            statement["Action"] = suggested_actions
             changes.append({
                 "statement_index": index,
-                "change": "Replaced wildcard Action '*' with limited read-only S3 actions.",
-                "reason": "Wildcard actions allow unrestricted access. The remediation applies least privilege."
+                "change": "Replaced wildcard Action '*' with inferred least-privilege actions.",
+                "reason": f"Intent inference result: {intent.get('reason')}"
             })
 
         if statement.get("Resource") == "*":
-            statement["Resource"] = [
-                "arn:aws:s3:::example-bucket",
-                "arn:aws:s3:::example-bucket/*"
-            ]
+            statement["Resource"] = suggested_resources
             changes.append({
                 "statement_index": index,
-                "change": "Replaced wildcard Resource '*' with a specific S3 bucket ARN.",
-                "reason": "Wildcard resources allow access to all resources. The remediation scopes access to one bucket."
+                "change": "Replaced wildcard Resource '*' with scoped resource hint.",
+                "reason": "Wildcard resources allow access to all resources. The remediation scopes access based on inferred intent or fallback policy."
+            })
+
+        if "NotAction" in statement:
+            statement.pop("NotAction", None)
+            if "Action" not in statement:
+                statement["Action"] = suggested_actions
+
+            changes.append({
+                "statement_index": index,
+                "change": "Removed NotAction and replaced it with explicit allowed actions.",
+                "reason": "Allow with NotAction can unintentionally grant broad access. Explicit Action is safer."
             })
 
         if "Condition" not in statement:
@@ -49,6 +73,7 @@ def remediate_policy(policy: dict, findings: list[dict]) -> dict:
             })
 
     return {
+        "intent_inference": intent,
         "remediated_policy": remediated,
         "changes": changes
     }

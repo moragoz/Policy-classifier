@@ -3,8 +3,8 @@
   "correct": 12,
   "agreement_rate": 1.0,
   "agreement_rate_percent": 100.0,
-  "total_time_seconds": 0.000358,
-  "average_time_seconds": 3e-05,
+  "total_time_seconds": 0.00019,
+  "average_time_seconds": 1.6e-05,
   "results": [
     {
       "name": "weak_full_admin",
@@ -12,7 +12,7 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 14,
-      "time_seconds": 7e-05,
+      "time_seconds": 4.3e-05,
       "findings_count": 4
     },
     {
@@ -21,7 +21,7 @@
       "predicted": "Strong",
       "correct": true,
       "risk_score": 2,
-      "time_seconds": 2e-05,
+      "time_seconds": 1e-05,
       "findings_count": 1
     },
     {
@@ -30,7 +30,7 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 14,
-      "time_seconds": 3.6e-05,
+      "time_seconds": 2e-05,
       "findings_count": 4
     },
     {
@@ -39,7 +39,7 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 12,
-      "time_seconds": 3.1e-05,
+      "time_seconds": 1.7e-05,
       "findings_count": 4
     },
     {
@@ -48,7 +48,7 @@
       "predicted": "Strong",
       "correct": true,
       "risk_score": 0,
-      "time_seconds": 1e-05,
+      "time_seconds": 5e-06,
       "findings_count": 0
     },
     {
@@ -57,7 +57,7 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 7,
-      "time_seconds": 2.6e-05,
+      "time_seconds": 1.3e-05,
       "findings_count": 3
     },
     {
@@ -66,7 +66,7 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 9,
-      "time_seconds": 2.7e-05,
+      "time_seconds": 1.3e-05,
       "findings_count": 3
     },
     {
@@ -75,7 +75,7 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 14,
-      "time_seconds": 2.6e-05,
+      "time_seconds": 1.3e-05,
       "findings_count": 4
     },
     {
@@ -84,7 +84,7 @@
       "predicted": "Strong",
       "correct": true,
       "risk_score": 2,
-      "time_seconds": 1.1e-05,
+      "time_seconds": 5e-06,
       "findings_count": 1
     },
     {
@@ -93,7 +93,7 @@
       "predicted": "Strong",
       "correct": true,
       "risk_score": 0,
-      "time_seconds": 8e-06,
+      "time_seconds": 3e-06,
       "findings_count": 0
     },
     {
@@ -102,7 +102,7 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 12,
-      "time_seconds": 2.5e-05,
+      "time_seconds": 1.2e-05,
       "findings_count": 4
     },
     {
@@ -111,7 +111,7 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 13,
-      "time_seconds": 2.7e-05,
+      "time_seconds": 1.4e-05,
       "findings_count": 4
     }
   ]
