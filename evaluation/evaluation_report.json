@@ -1,0 +1,118 @@
+{
+  "total_policies": 12,
+  "correct": 12,
+  "agreement_rate": 1.0,
+  "agreement_rate_percent": 100.0,
+  "total_time_seconds": 0.000358,
+  "average_time_seconds": 3e-05,
+  "results": [
+    {
+      "name": "weak_full_admin",
+      "expected": "Weak",
+      "predicted": "Weak",
+      "correct": true,
+      "risk_score": 14,
+      "time_seconds": 7e-05,
+      "findings_count": 4
+    },
+    {
+      "name": "strong_s3_readonly_with_mfa",
+      "expected": "Strong",
+      "predicted": "Strong",
+      "correct": true,
+      "risk_score": 2,
+      "time_seconds": 2e-05,
+      "findings_count": 1
+    },
+    {
+      "name": "weak_iam_passrole",
+      "expected": "Weak",
+      "predicted": "Weak",
+      "correct": true,
+      "risk_score": 14,
+      "time_seconds": 3.6e-05,
+      "findings_count": 4
+    },
+    {
+      "name": "weak_service_wildcard",
+      "expected": "Weak",
+      "predicted": "Weak",
+      "correct": true,
+      "risk_score": 12,
+      "time_seconds": 3.1e-05,
+      "findings_count": 4
+    },
+    {
+      "name": "strong_dynamodb_readonly_scoped",
+      "expected": "Strong",
+      "predicted": "Strong",
+      "correct": true,
+      "risk_score": 0,
+      "time_seconds": 1e-05,
+      "findings_count": 0
+    },
+    {
+      "name": "weak_s3_delete_all_buckets",
+      "expected": "Weak",
+      "predicted": "Weak",
+      "correct": true,
+      "risk_score": 7,
+      "time_seconds": 2.6e-05,
+      "findings_count": 3
+    },
+    {
+      "name": "weak_kms_decrypt_all_keys",
+      "expected": "Weak",
+      "predicted": "Weak",
+      "correct": true,
+      "risk_score": 9,
+      "time_seconds": 2.7e-05,
+      "findings_count": 3
+    },
+    {
+      "name": "weak_assume_any_role",
+      "expected": "Weak",
+      "predicted": "Weak",
+      "correct": true,
+      "risk_score": 14,
+      "time_seconds": 2.6e-05,
+      "findings_count": 4
+    },
+    {
+      "name": "strong_cloudwatch_logs_readonly",
+      "expected": "Strong",
+      "predicted": "Strong",
+      "correct": true,
+      "risk_score": 2,
+      "time_seconds": 1.1e-05,
+      "findings_count": 1
+    },
+    {
+      "name": "strong_lambda_invoke_specific_function",
+      "expected": "Strong",
+      "predicted": "Strong",
+      "correct": true,
+      "risk_score": 0,
+      "time_seconds": 8e-06,
+      "findings_count": 0
+    },
+    {
+      "name": "weak_ec2_terminate_instances",
+      "expected": "Weak",
+      "predicted": "Weak",
+      "correct": true,
+      "risk_score": 12,
+      "time_seconds": 2.5e-05,
+      "findings_count": 4
+    },
+    {
+      "name": "weak_notaction_allow",
+      "expected": "Weak",
+      "predicted": "Weak",
+      "correct": true,
+      "risk_score": 13,
+      "time_seconds": 2.7e-05,
+      "findings_count": 4
+    }
+  ]
+}
