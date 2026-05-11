@@ -3,8 +3,8 @@
   "correct": 12,
   "agreement_rate": 1.0,
   "agreement_rate_percent": 100.0,
-  "total_time_seconds": 0.00019,
-  "average_time_seconds": 1.6e-05,
+  "total_time_seconds": 0.000265,
+  "average_time_seconds": 2.2e-05,
   "results": [
     {
       "name": "weak_full_admin",
@@ -12,8 +12,58 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 14,
-      "time_seconds": 4.3e-05,
-      "findings_count": 4
+      "time_seconds": 4.5e-05,
+      "findings_count": 4,
+      "llm_used": false,
+      "remediation_generated": true,
+      "remediation_valid": true,
+      "intent_inference": {
+        "used_llm": false,
+        "intent": "unknown",
+        "service": "unknown",
+        "actions": [],
+        "resource_hint": null,
+        "confidence": "low",
+        "reason": "LLM intent inference skipped because OPENAI_API_KEY is not configured."
+      },
+      "remediated_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:GetObject",
+              "s3:ListBucket"
+            ],
+            "Resource": [
+              "arn:aws:s3:::example-bucket",
+              "arn:aws:s3:::example-bucket/*"
+            ],
+            "Condition": {
+              "Bool": {
+                "aws:MultiFactorAuthPresent": "true"
+              }
+            }
+          }
+        ]
+      },
+      "remediation_changes": [
+        {
+          "statement_index": 0,
+          "change": "Replaced wildcard Action '*' with inferred least-privilege actions.",
+          "reason": "Intent inference result: LLM intent inference skipped because OPENAI_API_KEY is not configured."
+        },
+        {
+          "statement_index": 0,
+          "change": "Replaced wildcard Resource '*' with scoped resource hint.",
+          "reason": "Wildcard resources allow access to all resources. The remediation scopes access based on inferred intent or fallback policy."
+        },
+        {
+          "statement_index": 0,
+          "change": "Added MFA condition.",
+          "reason": "Requiring MFA reduces the risk of unauthorized access."
+        }
+      ]
     },
     {
       "name": "strong_s3_readonly_with_mfa",
@@ -22,7 +72,13 @@
       "correct": true,
       "risk_score": 2,
       "time_seconds": 1e-05,
-      "findings_count": 1
+      "findings_count": 1,
+      "llm_used": false,
+      "remediation_generated": false,
+      "remediation_valid": null,
+      "intent_inference": null,
+      "remediated_policy": null,
+      "remediation_changes": null
     },
     {
       "name": "weak_iam_passrole",
@@ -30,8 +86,50 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 14,
-      "time_seconds": 2e-05,
-      "findings_count": 4
+      "time_seconds": 2.2e-05,
+      "findings_count": 4,
+      "llm_used": false,
+      "remediation_generated": true,
+      "remediation_valid": true,
+      "intent_inference": {
+        "used_llm": false,
+        "intent": "unknown",
+        "service": "unknown",
+        "actions": [],
+        "resource_hint": null,
+        "confidence": "low",
+        "reason": "LLM intent inference skipped because OPENAI_API_KEY is not configured."
+      },
+      "remediated_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": [
+              "arn:aws:s3:::example-bucket",
+              "arn:aws:s3:::example-bucket/*"
+            ],
+            "Condition": {
+              "Bool": {
+                "aws:MultiFactorAuthPresent": "true"
+              }
+            }
+          }
+        ]
+      },
+      "remediation_changes": [
+        {
+          "statement_index": 0,
+          "change": "Replaced wildcard Resource '*' with scoped resource hint.",
+          "reason": "Wildcard resources allow access to all resources. The remediation scopes access based on inferred intent or fallback policy."
+        },
+        {
+          "statement_index": 0,
+          "change": "Added MFA condition.",
+          "reason": "Requiring MFA reduces the risk of unauthorized access."
+        }
+      ]
     },
     {
       "name": "weak_service_wildcard",
@@ -39,8 +137,50 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 12,
-      "time_seconds": 1.7e-05,
-      "findings_count": 4
+      "time_seconds": 1.8e-05,
+      "findings_count": 4,
+      "llm_used": false,
+      "remediation_generated": true,
+      "remediation_valid": true,
+      "intent_inference": {
+        "used_llm": false,
+        "intent": "unknown",
+        "service": "unknown",
+        "actions": [],
+        "resource_hint": null,
+        "confidence": "low",
+        "reason": "LLM intent inference skipped because OPENAI_API_KEY is not configured."
+      },
+      "remediated_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "ec2:*",
+            "Resource": [
+              "arn:aws:s3:::example-bucket",
+              "arn:aws:s3:::example-bucket/*"
+            ],
+            "Condition": {
+              "Bool": {
+                "aws:MultiFactorAuthPresent": "true"
+              }
+            }
+          }
+        ]
+      },
+      "remediation_changes": [
+        {
+          "statement_index": 0,
+          "change": "Replaced wildcard Resource '*' with scoped resource hint.",
+          "reason": "Wildcard resources allow access to all resources. The remediation scopes access based on inferred intent or fallback policy."
+        },
+        {
+          "statement_index": 0,
+          "change": "Added MFA condition.",
+          "reason": "Requiring MFA reduces the risk of unauthorized access."
+        }
+      ]
     },
     {
       "name": "strong_dynamodb_readonly_scoped",
@@ -49,7 +189,13 @@
       "correct": true,
       "risk_score": 0,
       "time_seconds": 5e-06,
-      "findings_count": 0
+      "findings_count": 0,
+      "llm_used": false,
+      "remediation_generated": false,
+      "remediation_valid": null,
+      "intent_inference": null,
+      "remediated_policy": null,
+      "remediation_changes": null
     },
     {
       "name": "weak_s3_delete_all_buckets",
@@ -57,8 +203,42 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 7,
-      "time_seconds": 1.3e-05,
-      "findings_count": 3
+      "time_seconds": 1.4e-05,
+      "findings_count": 3,
+      "llm_used": false,
+      "remediation_generated": true,
+      "remediation_valid": true,
+      "intent_inference": {
+        "used_llm": false,
+        "intent": "unknown",
+        "service": "unknown",
+        "actions": [],
+        "resource_hint": null,
+        "confidence": "low",
+        "reason": "LLM intent inference skipped because OPENAI_API_KEY is not configured."
+      },
+      "remediated_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "s3:DeleteObject",
+            "Resource": "arn:aws:s3:::*",
+            "Condition": {
+              "Bool": {
+                "aws:MultiFactorAuthPresent": "true"
+              }
+            }
+          }
+        ]
+      },
+      "remediation_changes": [
+        {
+          "statement_index": 0,
+          "change": "Added MFA condition.",
+          "reason": "Requiring MFA reduces the risk of unauthorized access."
+        }
+      ]
     },
     {
       "name": "weak_kms_decrypt_all_keys",
@@ -66,8 +246,50 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 9,
-      "time_seconds": 1.3e-05,
-      "findings_count": 3
+      "time_seconds": 6.6e-05,
+      "findings_count": 3,
+      "llm_used": false,
+      "remediation_generated": true,
+      "remediation_valid": true,
+      "intent_inference": {
+        "used_llm": false,
+        "intent": "unknown",
+        "service": "unknown",
+        "actions": [],
+        "resource_hint": null,
+        "confidence": "low",
+        "reason": "LLM intent inference skipped because OPENAI_API_KEY is not configured."
+      },
+      "remediated_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "kms:Decrypt",
+            "Resource": [
+              "arn:aws:s3:::example-bucket",
+              "arn:aws:s3:::example-bucket/*"
+            ],
+            "Condition": {
+              "Bool": {
+                "aws:MultiFactorAuthPresent": "true"
+              }
+            }
+          }
+        ]
+      },
+      "remediation_changes": [
+        {
+          "statement_index": 0,
+          "change": "Replaced wildcard Resource '*' with scoped resource hint.",
+          "reason": "Wildcard resources allow access to all resources. The remediation scopes access based on inferred intent or fallback policy."
+        },
+        {
+          "statement_index": 0,
+          "change": "Added MFA condition.",
+          "reason": "Requiring MFA reduces the risk of unauthorized access."
+        }
+      ]
     },
     {
       "name": "weak_assume_any_role",
@@ -75,8 +297,50 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 14,
-      "time_seconds": 1.3e-05,
-      "findings_count": 4
+      "time_seconds": 1.5e-05,
+      "findings_count": 4,
+      "llm_used": false,
+      "remediation_generated": true,
+      "remediation_valid": true,
+      "intent_inference": {
+        "used_llm": false,
+        "intent": "unknown",
+        "service": "unknown",
+        "actions": [],
+        "resource_hint": null,
+        "confidence": "low",
+        "reason": "LLM intent inference skipped because OPENAI_API_KEY is not configured."
+      },
+      "remediated_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": [
+              "arn:aws:s3:::example-bucket",
+              "arn:aws:s3:::example-bucket/*"
+            ],
+            "Condition": {
+              "Bool": {
+                "aws:MultiFactorAuthPresent": "true"
+              }
+            }
+          }
+        ]
+      },
+      "remediation_changes": [
+        {
+          "statement_index": 0,
+          "change": "Replaced wildcard Resource '*' with scoped resource hint.",
+          "reason": "Wildcard resources allow access to all resources. The remediation scopes access based on inferred intent or fallback policy."
+        },
+        {
+          "statement_index": 0,
+          "change": "Added MFA condition.",
+          "reason": "Requiring MFA reduces the risk of unauthorized access."
+        }
+      ]
     },
     {
       "name": "strong_cloudwatch_logs_readonly",
@@ -85,7 +349,13 @@
       "correct": true,
       "risk_score": 2,
       "time_seconds": 5e-06,
-      "findings_count": 1
+      "findings_count": 1,
+      "llm_used": false,
+      "remediation_generated": false,
+      "remediation_valid": null,
+      "intent_inference": null,
+      "remediated_policy": null,
+      "remediation_changes": null
     },
     {
       "name": "strong_lambda_invoke_specific_function",
@@ -93,8 +363,14 @@
       "predicted": "Strong",
       "correct": true,
       "risk_score": 0,
-      "time_seconds": 3e-06,
-      "findings_count": 0
+      "time_seconds": 4e-06,
+      "findings_count": 0,
+      "llm_used": false,
+      "remediation_generated": false,
+      "remediation_valid": null,
+      "intent_inference": null,
+      "remediated_policy": null,
+      "remediation_changes": null
     },
     {
       "name": "weak_ec2_terminate_instances",
@@ -102,8 +378,50 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 12,
-      "time_seconds": 1.2e-05,
-      "findings_count": 4
+      "time_seconds": 1.4e-05,
+      "findings_count": 4,
+      "llm_used": false,
+      "remediation_generated": true,
+      "remediation_valid": true,
+      "intent_inference": {
+        "used_llm": false,
+        "intent": "unknown",
+        "service": "unknown",
+        "actions": [],
+        "resource_hint": null,
+        "confidence": "low",
+        "reason": "LLM intent inference skipped because OPENAI_API_KEY is not configured."
+      },
+      "remediated_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "ec2:TerminateInstances",
+            "Resource": [
+              "arn:aws:s3:::example-bucket",
+              "arn:aws:s3:::example-bucket/*"
+            ],
+            "Condition": {
+              "Bool": {
+                "aws:MultiFactorAuthPresent": "true"
+              }
+            }
+          }
+        ]
+      },
+      "remediation_changes": [
+        {
+          "statement_index": 0,
+          "change": "Replaced wildcard Resource '*' with scoped resource hint.",
+          "reason": "Wildcard resources allow access to all resources. The remediation scopes access based on inferred intent or fallback policy."
+        },
+        {
+          "statement_index": 0,
+          "change": "Added MFA condition.",
+          "reason": "Requiring MFA reduces the risk of unauthorized access."
+        }
+      ]
     },
     {
       "name": "weak_notaction_allow",
@@ -111,8 +429,58 @@
       "predicted": "Weak",
       "correct": true,
       "risk_score": 13,
-      "time_seconds": 1.4e-05,
-      "findings_count": 4
+      "time_seconds": 1.6e-05,
+      "findings_count": 4,
+      "llm_used": false,
+      "remediation_generated": true,
+      "remediation_valid": true,
+      "intent_inference": {
+        "used_llm": false,
+        "intent": "unknown",
+        "service": "unknown",
+        "actions": [],
+        "resource_hint": null,
+        "confidence": "low",
+        "reason": "LLM intent inference skipped because OPENAI_API_KEY is not configured."
+      },
+      "remediated_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Resource": [
+              "arn:aws:s3:::example-bucket",
+              "arn:aws:s3:::example-bucket/*"
+            ],
+            "Action": [
+              "s3:GetObject",
+              "s3:ListBucket"
+            ],
+            "Condition": {
+              "Bool": {
+                "aws:MultiFactorAuthPresent": "true"
+              }
+            }
+          }
+        ]
+      },
+      "remediation_changes": [
+        {
+          "statement_index": 0,
+          "change": "Replaced wildcard Resource '*' with scoped resource hint.",
+          "reason": "Wildcard resources allow access to all resources. The remediation scopes access based on inferred intent or fallback policy."
+        },
+        {
+          "statement_index": 0,
+          "change": "Removed NotAction and replaced it with explicit allowed actions.",
+          "reason": "Allow with NotAction can unintentionally grant broad access. Explicit Action is safer."
+        },
+        {
+          "statement_index": 0,
+          "change": "Added MFA condition.",
+          "reason": "Requiring MFA reduces the risk of unauthorized access."
+        }
+      ]
     }
   ]
 }

@@ -20,15 +20,20 @@ def main():
 
     for item in evaluation_set:
         start = time.perf_counter()
+
         result = classify_policy(item["policy"])
+
         elapsed = time.perf_counter() - start
 
         predicted = result["classification"]
         expected = item["expected_classification"]
+
         is_correct = predicted == expected
 
         if is_correct:
             correct += 1
+
+        remediation = result.get("remediation")
 
         results.append({
             "name": item["name"],
@@ -37,11 +42,42 @@ def main():
             "correct": is_correct,
             "risk_score": result["risk_score"],
             "time_seconds": round(elapsed, 6),
-            "findings_count": len(result["findings"])
+            "findings_count": len(result["findings"]),
+
+            # LLM usage
+            "llm_used": result.get("llm_review", {}).get("used_llm", False),
+
+            # Remediation information
+            "remediation_generated": remediation is not None,
+
+            "remediation_valid": (
+                remediation.get("validation", {}).get("valid")
+                if remediation
+                else None
+            ),
+
+            "intent_inference": (
+                remediation.get("intent_inference")
+                if remediation
+                else None
+            ),
+
+            "remediated_policy": (
+                remediation.get("remediated_policy")
+                if remediation
+                else None
+            ),
+
+            "remediation_changes": (
+                remediation.get("changes")
+                if remediation
+                else None
+            )
         })
 
     total_time = time.perf_counter() - start_total
     total = len(evaluation_set)
+
     agreement_rate = correct / total if total else 0
 
     report = {
@@ -53,7 +89,9 @@ def main():
         "average_time_seconds": round(total_time / total, 6) if total else 0,
         "results": results
     }
+
     output_path = Path("evaluation/evaluation_report.json")
+
     with output_path.open("w", encoding="utf-8") as file:
         json.dump(report, file, indent=2)
 
